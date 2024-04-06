@@ -21,6 +21,10 @@ header, footer, body, .video-container {
     background-color:antiquewhite
 }
 
+.name {
+    padding-top: 10px;
+}
+
 /*Глобальные стили для хедеров на всём сайте*/
 header {
     color: black;
