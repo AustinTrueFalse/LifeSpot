@@ -1,21 +1,22 @@
 ﻿
-let session = new Map();
 
-
-function checkAge() {
-
-    session.set("age", prompt("Пожалуйста, введите ваш возраст?"))
-
-    if (session.get("age") >= 18) {
-        let startDate = new Date().toLocaleString();
-
-        alert("Приветствуем на LifeSpot! " + '\n' + "Текущее время: " + startDate);
-        session.set("startDate", startDate)
+let checker = function (newVisit) {
+    if (window.sessionStorage.getItem("userAge") >= 18) {
+        
+        if (newVisit) {
+            alert("Приветствуем на LifeSpot! " + '\n' + "Текущее время: " + new Date().toLocaleString());
+        }
     }
     else {
         alert("Наши трансляции не предназначены для лиц моложе 18 лет. Вы будете перенаправлены");
         window.location.href = "http://www.google.com"
     }
+}
+
+let logger = function () {
+    console.log('Начало сессии: ' + window.sessionStorage.getItem("startDate"))
+    console.log('Даныне клиента: ' + window.sessionStorage.getItem("userAgent"))
+    console.log('Возраст пользователя: ' + window.sessionStorage.getItem("userAge"))
 }
 
 const subsctiptionAlert = function() {
@@ -24,34 +25,38 @@ const subsctiptionAlert = function() {
 
 
 
-function handleSession() {
+function handleSession(logger, checker) {
 
-    session.set("startDate", new Date().toLocaleString())
-    session.set("userAgent", window.navigator.userAgent)
-
-
-    for (let result of session) {
-        console.log(result)
+    if (window.sessionStorage.getItem("startDate") == null) {
+        window.sessionStorage.setItem("startDate", new Date().toLocaleString())
     }
 
-    const intervalId = setInterval(subsctiptionAlert, 5000)
-
-    const timeoutId = setTimeout(function () {
-        clearInterval(intervalId)
-    }, 5000)
-
-}
-
-let sessionLog = function logSession() {
-    for (let result of session) {
-        console.log(result)
+    if (window.sessionStorage.getItem("userAgent") == null) {
+        window.sessionStorage.setItem("userAgent", window.navigator.userAgent)
     }
+
+    if (window.sessionStorage.getItem("userAge") == null) {
+        let input = prompt("Пожалуйста, введите ваш возраст?");
+        window.sessionStorage.setItem("userAge", input)
+
+ 
+        checker(true)
+    } else {
+
+       
+        checker(false)
+    }
+
+    logger()
+}
+
+let sessionLog = function () {
+    console.log('Начало сессии: ' + session.startDate)
+    console.log('Даныне клиента: ' + session.userAgent)
+    console.log('Возраст пользователя: : ' + session.userAge)
 }
 
 
-const inputParseFunction = function () {
-    return document.getElementsByTagName('input')[0].value.toLowerCase();
-}
 
 function filterContent() {
     let elements = document.getElementsByClassName('video-container');
